@@ -1,0 +1,15 @@
+---
+# tasks file for deploy
+- name: copying the files to the location 
+  copy:
+    src: "{{item}}"
+    dest: "/mnt/{{item}}"
+  loop:  "{{ files }}"
+
+- name: Running docker compose commands
+  shell: |
+        cd /mnt
+        docker-compose build
+        docker-compose up -d
+        sleep 180
+        docker-compose exec mysql sh /mnt/run.sh
